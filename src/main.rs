@@ -2,6 +2,7 @@ pub mod entity;
 pub mod service;
 pub mod errs;
 pub mod api;
+pub mod conf;
 
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 

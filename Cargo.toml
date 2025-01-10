@@ -13,3 +13,4 @@ dotenvy = "0.15.7"
 sea-orm = { version = "0.12.0", features = ["runtime-tokio-native-tls", "sqlx-postgres"] }
 chrono = "0.4.39"
 derive_more = "0.99"
+config = "0.15.4"
