@@ -1,8 +1,10 @@
-use async_trait::async_trait;
-use sea_orm::prelude::async_trait;
-use crate::entity::user::Model as UserModel;
-use crate::errs::http::Error;
+use std::sync::Arc;
 
-pub struct UserService;
+use sea_orm::DatabaseConnection;
+
+
+pub struct UserService {
+    db: Arc<DatabaseConnection>
+}
 
 
