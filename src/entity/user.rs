@@ -11,8 +11,11 @@ pub struct Model {
     pub oauth_id: String,
     pub username: String,
     pub avatar: String,
+    #[serde(skip)]
     pub password: String,
+    #[serde(skip)]
     pub created_at: DateTime,
+    #[serde(skip)]
     pub updated_at: DateTime,
 }
 
