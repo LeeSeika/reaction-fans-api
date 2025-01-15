@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
-pub struct Database {
+pub struct Nats {
     pub url: String,
 }

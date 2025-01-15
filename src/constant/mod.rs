@@ -1,0 +1,1 @@
+pub const REGISTER_CODE_EXPIRE_TIME: u64 = 60 * 5;

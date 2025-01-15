@@ -6,3 +6,7 @@ pub struct LoginOauthQQReq {
 pub struct LoginOauthBilibiliReq {
     pub(crate) oauth_code: String,
 }
+
+pub struct RegisterReq {
+    pub(crate) email: String,
+}

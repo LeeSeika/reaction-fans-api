@@ -1,15 +1,20 @@
+use super::{cache::Cache, db::Database, mailer::Mailer, nats::Nats, oauth::QQ, server::Server};
 use config::{Config as Conf, ConfigError};
 use serde::Deserialize;
-use super::{db::Database, oauth::QQ, server::Server};
-
 
 #[derive(Deserialize, Clone)]
 pub struct Config {
     pub server: Server,
 
     pub database: Database,
-    
+
+    pub cache: Cache,
+
     pub oauth_qq: QQ,
+
+    pub nats: Nats,
+
+    pub mailer: Mailer,
 }
 
 impl Config {
@@ -22,7 +27,7 @@ impl Config {
             .build()?;
 
         let conf = settings.try_deserialize::<Config>()?;
-        
+
         Ok(conf)
     }
 }

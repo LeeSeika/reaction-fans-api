@@ -18,10 +18,33 @@ pub enum Error {
 }
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "(code: {}) {}", code, message)]
+#[display(fmt = "code: {}, message: {}", code, message)]
 pub struct InnerError {
     pub message: String,
     pub code: u16,
+}
+
+impl Error {
+    pub fn internal_error(code: Option<u16>, message: Option<&str>) -> Error {
+        Error::InternalError(InnerError {
+            message: message.unwrap_or("").to_string(),
+            code: code.unwrap_or(0),
+        })
+    }
+
+    pub fn bad_request(code: Option<u16>, message: Option<&str>) -> Error {
+        Error::BadClientData(InnerError {
+            message: message.unwrap_or("").to_string(),
+            code: code.unwrap_or(0),
+        })
+    }
+
+    pub fn unauthorized(code: Option<u16>, message: Option<&str>) -> Error {
+        Error::Unauthorized(InnerError {
+            message: message.unwrap_or("").to_string(),
+            code: code.unwrap_or(0),
+        })
+    }
 }
 
 impl error::ResponseError for Error {

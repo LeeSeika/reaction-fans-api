@@ -8,6 +8,7 @@ use async_trait::async_trait;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    pub email: String,
     pub oauth_id: String,
     pub username: String,
     pub avatar: String,
