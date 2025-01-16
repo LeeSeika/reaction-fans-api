@@ -1,5 +1,5 @@
-pub mod login_oauth_qq;
-pub mod login_oauth_bilibili;
-pub mod register;
-
+mod login_oauth_qq;
+mod register;
 mod req_model;
+
+pub use register::register;

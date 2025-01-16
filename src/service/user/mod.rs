@@ -1,10 +1,9 @@
-mod svc;
 mod login_oauth_qq;
-mod login_oauth_bilibili;
 mod register;
+mod svc;
 
-use crate::entity::user::Entity as UserModel;
 use crate::entity::user::Column as UserColumn;
+use crate::entity::user::Entity as UserModel;
 
-pub use svc::UserService;
 pub use svc::new;
+pub use svc::UserService;

@@ -51,6 +51,10 @@ async fn main() -> std::io::Result<()> {
                     Arc::clone(&client),
                 ),
             }))
+            .service(
+                web::scope("/api/v1/users")
+                    .route("/register", web::post().to(api::v1::user::register)),
+            )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))
     })

@@ -8,6 +8,7 @@ use super::UserModel;
 use crate::constant::REGISTER_CODE_EXPIRE_TIME;
 use crate::errs::http::Error as HttpError;
 use crate::service::email;
+use tklog::error;
 
 impl UserService {
     pub async fn register(&self, email: String) -> Result<(), HttpError> {
@@ -15,8 +16,10 @@ impl UserService {
             .filter(UserColumn::Email.eq(email.as_str()))
             .one(self.db.as_ref())
             .await
-            .map_err(|_| HttpError::internal_error(None, None))?
-        {
+            .map_err(|e| {
+                error!("cannot find user by email, error: ", e);
+                HttpError::internal_error(None, None)
+            })? {
             Some(_) => return Err(HttpError::bad_request(None, Some("email already exists"))),
             None => {}
         };
@@ -29,14 +32,20 @@ impl UserService {
             .as_ref()
             .get_multiplexed_async_connection()
             .await
-            .unwrap()
+            .map_err(|e| {
+                error!("cannot get redis connection, error: ", e);
+                HttpError::internal_error(None, None)
+            })?
             .set_ex::<String, String, ()>(
                 email.to_owned(),
                 code.to_owned(),
                 REGISTER_CODE_EXPIRE_TIME,
             )
             .await
-            .map_err(|_| HttpError::internal_error(None, None))?;
+            .map_err(|e| {
+                error!("cannot set code to cache, error: ", e);
+                HttpError::internal_error(None, None)
+            })?;
 
         // TODO make it async
         // send email asynchronously

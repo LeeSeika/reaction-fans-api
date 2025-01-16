@@ -1,0 +1,15 @@
+[server]
+host = "127.0.0.1"
+port = 8085
+
+[database]
+url = "postgresql://postgres.ynavyropkerchaxytqkc:a626232582@aws-0-ap-southeast-1.pooler.supabase.com:5432/reaction-fans"
+
+[cache]
+url = "redis://default:gtICclDRv8heoV4H1FO0jLCkq0I2fSWd@redis-16137.crce178.ap-east-1-1.ec2.redns.redis-cloud.com:16137"
+
+[mailer]
+sender = "dota2_auto_bot@163.com"
+smtp_host = "smtp.163.com"
+smtp_username = "dota2_auto_bot@163.com"
+smtp_pwd = "NZPZQHKADYUCYPRV"
