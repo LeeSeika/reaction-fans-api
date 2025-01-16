@@ -46,6 +46,10 @@ async fn main() -> std::io::Result<()> {
                     Arc::clone(&db),
                     Arc::clone(&client),
                 ),
+                video_service: service::video::new(
+                    Arc::clone(&db),
+                    Arc::clone(&client),
+                ),
             }))
             .service(
                 web::scope("/api/v1/users")
@@ -54,6 +58,10 @@ async fn main() -> std::io::Result<()> {
                         "/verify",
                         web::post().to(api::v1::user::verify_register_code),
                     ),
+            )
+            .service(
+                web::scope("/api/v1/videos")
+                    .route("/{id}", web::get().to(api::v1::video::get_video))
             )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))
@@ -65,4 +73,5 @@ async fn main() -> std::io::Result<()> {
 
 pub struct AppState {
     pub user_service: service::user::UserService,
+    pub video_service: service::video::VideoService,
 }

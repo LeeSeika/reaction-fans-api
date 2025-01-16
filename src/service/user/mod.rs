@@ -5,7 +5,7 @@ mod verify_register_code;
 
 use crate::entity::user::ActiveModel as UserActiveModel;
 use crate::entity::user::Column as UserColumn;
-use crate::entity::user::Entity as UserModel;
+use crate::entity::user::Entity as UserEntity;
 
 pub use svc::new;
 pub use svc::UserService;

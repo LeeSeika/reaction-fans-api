@@ -1,5 +1,5 @@
 use chrono::Utc;
-use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait, Set};
+use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, RelationDef, RelationTrait, Set};
 use serde::{Deserialize, Serialize};
 use async_trait::async_trait;
 
@@ -7,7 +7,7 @@ use async_trait::async_trait;
 #[sea_orm(table_name = "topics")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub id: i64,
+    pub id: uuid::Uuid,
     pub name: String,
     pub created_at: DateTime,
 }

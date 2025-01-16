@@ -15,6 +15,9 @@ pub enum Error {
 
     #[display(fmt = "unauthorized: {}", _0)]
     Unauthorized(InnerError),
+
+    #[display(fmt = "not found: {}", _0)]
+    NotFound(InnerError),
 }
 
 #[derive(Debug, Display, Error)]
@@ -45,20 +48,28 @@ impl Error {
             code: code.unwrap_or(0),
         })
     }
+
+    pub(crate) fn not_found(code: Option<u16>, message: Option<&str>) -> Error {
+        Error::NotFound(InnerError {
+            message: message.unwrap_or("").to_string(),
+            code: code.unwrap_or(0),
+        })
+    }
 }
 
 impl error::ResponseError for Error {
-    fn error_response(&self) -> HttpResponse {
-        HttpResponse::build(self.status_code())
-            .insert_header(ContentType::html())
-            .body(self.to_string())
-    }
-
     fn status_code(&self) -> StatusCode {
         match *self {
             Error::InternalError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             Error::BadClientData(_) => StatusCode::BAD_REQUEST,
             Error::Unauthorized(_) => StatusCode::UNAUTHORIZED,
+            Error::NotFound(_) => StatusCode::NOT_FOUND,
         }
+    }
+
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::build(self.status_code())
+            .insert_header(ContentType::html())
+            .body(self.to_string())
     }
 }

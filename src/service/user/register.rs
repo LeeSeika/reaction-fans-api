@@ -4,7 +4,7 @@ use sea_orm::{EntityTrait, QueryFilter};
 
 use super::svc::UserService;
 use super::UserColumn;
-use super::UserModel;
+use super::UserEntity;
 use crate::constant::REGISTER_CODE_EXPIRE_TIME;
 use crate::errs::http::Error as HttpError;
 use crate::service::email;
@@ -12,7 +12,7 @@ use tklog::error;
 
 impl UserService {
     pub async fn register(&self, email: String) -> Result<(), HttpError> {
-        match UserModel::find()
+        match UserEntity::find()
             .filter(UserColumn::Email.eq(email.as_str()))
             .one(self.db.as_ref())
             .await

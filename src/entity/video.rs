@@ -1,13 +1,14 @@
-use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait, Set};
+use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, RelationDef, RelationTrait, Set};
 use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use async_trait::async_trait;
+use uuid;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, Default)]
 #[sea_orm(table_name = "videos")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub id: i64,
+    pub id: uuid::Uuid,
     pub name: String,
     pub author_id: i64,
     pub original_url: String,
@@ -33,9 +34,10 @@ impl ActiveModelBehavior for ActiveModel {
         C: sea_orm::ConnectionTrait,
     {
         let now = Utc::now().naive_utc();
+        let mut clone_self = self.clone();
         if insert {
-            self.created_at = Set(now);
+            clone_self.created_at = Set(now);
         }
-        Ok(self)
+        Ok(clone_self)
     }
 }

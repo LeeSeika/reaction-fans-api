@@ -23,6 +23,56 @@ impl MigrationTrait for Migration {
                     .col(timestamp(Users::UpdatedAt))
                     .to_owned(),
             )
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(Authors::Table)
+                    .col(pk_uuid(Authors::Id))
+                    .col(string(Authors::Name))
+                    .col(string_null(Authors::SpaceUrl))
+                    .col(timestamp(Authors::CreatedAt))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(Categories::Table)
+                    .col(pk_uuid(Categories::Id))
+                    .col(string(Categories::Name).unique_key())
+                    .col(timestamp(Categories::CreatedAt))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(Topics::Table)
+                    .col(pk_uuid(Topics::Id))
+                    .col(string(Topics::Name).unique_key())
+                    .col(timestamp(Topics::CreatedAt))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(Videos::Table)
+                    .col(pk_uuid(Videos::Id))
+                    .col(string(Videos::Name))
+                    .col(uuid(Videos::AuthorId))
+                    .col(string(Videos::OriginalUrl))
+                    .col(uuid(Videos::TopicId))
+                    .col(uuid(Videos::CategoryId))
+                    .col(timestamp_null(Videos::PostedAt))
+                    .col(timestamp(Videos::CreatedAt))
+                    .to_owned(),
+            )
             .await
     }
 

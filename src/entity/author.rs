@@ -1,4 +1,4 @@
-use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait, Set};
+use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, RelationDef, RelationTrait, Set};
 use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use async_trait::async_trait;
@@ -7,7 +7,7 @@ use async_trait::async_trait;
 #[sea_orm(table_name = "authors")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub id: i64,
+    pub id: uuid::Uuid,
     pub name: String,
     pub space_url: String,
     pub created_at: DateTime,
