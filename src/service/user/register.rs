@@ -28,9 +28,7 @@ impl UserService {
         let code = format!("{:04}", rand::random::<u16>() % 10000);
 
         // set code to cache
-        self.cache
-            .as_ref()
-            .get_multiplexed_async_connection()
+        self.cache()
             .await
             .map_err(|e| {
                 error!("cannot get redis connection, error: ", e);

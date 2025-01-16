@@ -5,7 +5,7 @@ pub mod entity;
 pub mod errs;
 pub mod service;
 
-use std::{ops::DerefMut, sync::Arc};
+use std::sync::Arc;
 
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use sea_orm::Database;
@@ -34,12 +34,8 @@ async fn main() -> std::io::Result<()> {
         .expect("Database connection failed");
     let db = Arc::new(conn);
 
-    // init cache connection
-    let client = redis::Client::open(conf.cache.url.as_str()).unwrap();
-    // let cache = client
-    //     .get_multiplexed_async_connection()
-    //     .await
-    //     .expect("Cache connection failed");
+    // init cache client
+    let client = redis::Client::open(conf.cache.url.as_str()).expect("Cache client init failed");
     let client = Arc::new(client);
 
     HttpServer::new(move || {
@@ -53,7 +49,11 @@ async fn main() -> std::io::Result<()> {
             }))
             .service(
                 web::scope("/api/v1/users")
-                    .route("/register", web::post().to(api::v1::user::register)),
+                    .route("/register", web::post().to(api::v1::user::register))
+                    .route(
+                        "/verify",
+                        web::post().to(api::v1::user::verify_register_code),
+                    ),
             )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))
