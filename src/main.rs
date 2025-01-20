@@ -4,6 +4,7 @@ pub mod constant;
 pub mod entity;
 pub mod errs;
 pub mod service;
+pub mod utils;
 
 use std::sync::Arc;
 
@@ -46,10 +47,7 @@ async fn main() -> std::io::Result<()> {
                     Arc::clone(&db),
                     Arc::clone(&client),
                 ),
-                video_service: service::video::new(
-                    Arc::clone(&db),
-                    Arc::clone(&client),
-                ),
+                video_service: service::video::new(Arc::clone(&db), Arc::clone(&client)),
             }))
             .service(
                 web::scope("/api/v1/users")
@@ -62,6 +60,7 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api/v1/videos")
                     .route("/{id}", web::get().to(api::v1::video::get_video))
+                    .route("", web::post().to(api::v1::video::add_video)),
             )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))

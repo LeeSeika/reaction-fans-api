@@ -5,6 +5,7 @@ use crate::errs::http::Error as HttpError;
 use redis::AsyncCommands;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;
+use sea_orm::SqlErr;
 use tklog::{error, warn};
 use uuid::Uuid;
 
@@ -49,8 +50,10 @@ impl UserService {
                 Ok(())
             }
             Err(e) => {
-                if e.to_string().contains("UNIQUE constraint failed") {
-                    return Err(HttpError::bad_request(None, Some("email already exists")));
+                if let Some(sql_err) = e.sql_err() {
+                    if matches!(sql_err, SqlErr::UniqueConstraintViolation(_)) {
+                        return Err(HttpError::bad_request(None, Some("email already exists")));
+                    }
                 }
                 error!("cannot insert user into db, error: ", e);
                 Err(HttpError::internal_error(None, None))

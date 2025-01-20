@@ -19,6 +19,7 @@ redis = { version = "0.28.1", features = ["tokio-comp", "r2d2"] }
 lettre = "*"
 tklog = "0.2.9"
 uuid = { version = "1.9.1", features = ["v4"] }
+reqwest = { version = "0.12", features = ["json"] }
 
 [workspace]
 members = [

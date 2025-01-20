@@ -1,7 +1,11 @@
-use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, RelationDef, RelationTrait, Set};
-use serde::{Deserialize, Serialize};
-use chrono::Utc;
 use async_trait::async_trait;
+use chrono::Utc;
+use sea_orm::{
+    prelude::{async_trait, DateTime},
+    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
+    EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait, Set,
+};
+use serde::{Deserialize, Serialize};
 use uuid;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, Default)]
@@ -9,27 +13,67 @@ use uuid;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: uuid::Uuid,
-    pub name: String,
-    pub author_id: i64,
-    pub original_url: String,
-    pub topic_id: i64,
-    pub category_id: i64,
-    pub posted_at: DateTime,
+    pub author_id: uuid::Uuid,
+    pub original_url: Option<String>,
+    pub topic_id: uuid::Uuid,
+    pub category_id: uuid::Uuid,
+    pub published_at: DateTime,
+    pub platform: String,
+    pub meta_id: uuid::Uuid,
     pub created_at: DateTime,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter)]
-pub enum Relation {}
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(has_one = "super::bilibili_meta::Entity")]
+    BilibiliMeta,
+    #[sea_orm(
+        belongs_to = "super::author::Entity",
+        from = "Column::AuthorId",
+        to = "super::author::Column::Id"
+    )]
+    Author,
+    #[sea_orm(
+        belongs_to = "super::topic::Entity",
+        from = "Column::TopicId",
+        to = "super::topic::Column::Id"
+    )]
+    Topic,
+    #[sea_orm(
+        belongs_to = "super::category::Entity",
+        from = "Column::CategoryId",
+        to = "super::category::Column::Id"
+    )]
+    Category,
+}
 
-impl RelationTrait for Relation {
-    fn def(&self) -> RelationDef {
-        todo!()
+impl Related<super::bilibili_meta::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::BilibiliMeta.def()
+    }
+}
+
+impl Related<super::author::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Author.def()
+    }
+}
+
+impl Related<super::topic::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Topic.def()
+    }
+}
+
+impl Related<super::category::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Category.def()
     }
 }
 
 #[async_trait]
 impl ActiveModelBehavior for ActiveModel {
-    async fn before_save<C>(mut self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
+    async fn before_save<C>(self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
     where
         C: sea_orm::ConnectionTrait,
     {

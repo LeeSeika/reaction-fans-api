@@ -1,7 +1,11 @@
-use chrono::Utc;
-use sea_orm::{prelude::{async_trait, DateTime}, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter, PrimaryKeyTrait, RelationDef, RelationTrait, Set};
-use serde::{Deserialize, Serialize};
 use async_trait::async_trait;
+use chrono::Utc;
+use sea_orm::{
+    prelude::{async_trait, DateTime},
+    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter,
+    PrimaryKeyTrait, RelationDef, RelationTrait, Set,
+};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, Default)]
 #[sea_orm(table_name = "categories")]
@@ -23,14 +27,15 @@ impl RelationTrait for Relation {
 
 #[async_trait]
 impl ActiveModelBehavior for ActiveModel {
-    async fn before_save<C>(mut self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
+    async fn before_save<C>(self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
     where
         C: sea_orm::ConnectionTrait,
     {
         let now = Utc::now().naive_utc();
+        let mut clone_self = self.clone();
         if insert {
-            self.created_at = Set(now);
+            clone_self.created_at = Set(now);
         }
-        Ok(self)
+        Ok(clone_self)
     }
 }

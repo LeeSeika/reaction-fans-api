@@ -31,6 +31,8 @@ impl MigrationTrait for Migration {
                     .table(Authors::Table)
                     .col(pk_uuid(Authors::Id))
                     .col(string(Authors::Name))
+                    .col(string(Authors::OriginalId))
+                    .col(string(Authors::Platform))
                     .col(string_null(Authors::SpaceUrl))
                     .col(timestamp(Authors::CreatedAt))
                     .to_owned(),
@@ -64,13 +66,40 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Videos::Table)
                     .col(pk_uuid(Videos::Id))
-                    .col(string(Videos::Name))
                     .col(uuid(Videos::AuthorId))
-                    .col(string(Videos::OriginalUrl))
+                    .col(string_null(Videos::OriginalUrl))
                     .col(uuid(Videos::TopicId))
                     .col(uuid(Videos::CategoryId))
-                    .col(timestamp_null(Videos::PostedAt))
+                    .col(timestamp(Videos::PublishedAt))
+                    .col(string(Videos::Platform))
+                    .col(uuid(Videos::MetaId))
                     .col(timestamp(Videos::CreatedAt))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(BilibiliMeta::Table)
+                    .col(pk_uuid(BilibiliMeta::Id))
+                    .col(string_uniq(BilibiliMeta::Bvid))
+                    .col(integer_uniq(BilibiliMeta::Aid))
+                    .col(string(BilibiliMeta::Iframe))
+                    .col(integer(BilibiliMeta::Videos))
+                    .col(json(BilibiliMeta::Pages))
+                    .col(string(BilibiliMeta::Pic))
+                    .col(string(BilibiliMeta::Title))
+                    .col(timestamp(BilibiliMeta::Pubdate))
+                    .col(integer(BilibiliMeta::Duration))
+                    .col(integer(BilibiliMeta::View))
+                    .col(integer(BilibiliMeta::Danmaku))
+                    .col(integer(BilibiliMeta::Reply))
+                    .col(integer(BilibiliMeta::Favorite))
+                    .col(integer(BilibiliMeta::Coin))
+                    .col(integer(BilibiliMeta::Share))
+                    .col(integer(BilibiliMeta::Like))
+                    .col(timestamp(BilibiliMeta::CreatedAt))
                     .to_owned(),
             )
             .await
@@ -104,6 +133,8 @@ enum Authors {
     Table,
     Id,
     Name,
+    OriginalId,
+    Platform,
     SpaceUrl,
     CreatedAt,
 }
@@ -128,11 +159,35 @@ enum Topics {
 enum Videos {
     Table,
     Id,
-    Name,
     AuthorId,
     OriginalUrl,
     TopicId,
     CategoryId,
-    PostedAt,
+    PublishedAt,
+    Platform,
+    MetaId,
+    CreatedAt,
+}
+
+#[derive(DeriveIden)]
+enum BilibiliMeta {
+    Table,
+    Id,
+    Bvid,
+    Aid,
+    Iframe,
+    Videos,
+    Pages,
+    Pic,
+    Title,
+    Pubdate,
+    Duration,
+    View,
+    Danmaku,
+    Reply,
+    Favorite,
+    Coin,
+    Share,
+    Like,
     CreatedAt,
 }
