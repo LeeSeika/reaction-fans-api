@@ -19,7 +19,10 @@ impl MigrationTrait for Migration {
                     .col(string(Users::Username).default("default user"))
                     .col(string(Users::Avatar).default("default avatar"))
                     .col(string_null(Users::Password))
-                    .col(timestamp(Users::CreatedAt))
+                    .col(
+                        timestamp(Users::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .col(timestamp(Users::UpdatedAt))
                     .to_owned(),
             )
@@ -31,10 +34,13 @@ impl MigrationTrait for Migration {
                     .table(Authors::Table)
                     .col(pk_uuid(Authors::Id))
                     .col(string(Authors::Name))
-                    .col(string(Authors::OriginalId))
+                    .col(string_uniq(Authors::OriginalId))
                     .col(string(Authors::Platform))
                     .col(string_null(Authors::SpaceUrl))
-                    .col(timestamp(Authors::CreatedAt))
+                    .col(
+                        timestamp(Authors::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -45,7 +51,10 @@ impl MigrationTrait for Migration {
                     .table(Categories::Table)
                     .col(pk_uuid(Categories::Id))
                     .col(string(Categories::Name).unique_key())
-                    .col(timestamp(Categories::CreatedAt))
+                    .col(
+                        timestamp(Categories::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -56,7 +65,10 @@ impl MigrationTrait for Migration {
                     .table(Topics::Table)
                     .col(pk_uuid(Topics::Id))
                     .col(string(Topics::Name).unique_key())
-                    .col(timestamp(Topics::CreatedAt))
+                    .col(
+                        timestamp(Topics::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -73,7 +85,10 @@ impl MigrationTrait for Migration {
                     .col(timestamp(Videos::PublishedAt))
                     .col(string(Videos::Platform))
                     .col(uuid(Videos::MetaId))
-                    .col(timestamp(Videos::CreatedAt))
+                    .col(
+                        timestamp(Videos::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -99,7 +114,10 @@ impl MigrationTrait for Migration {
                     .col(integer(BilibiliMeta::Coin))
                     .col(integer(BilibiliMeta::Share))
                     .col(integer(BilibiliMeta::Like))
-                    .col(timestamp(BilibiliMeta::CreatedAt))
+                    .col(
+                        timestamp(BilibiliMeta::CreatedAt)
+                            .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
+                    )
                     .to_owned(),
             )
             .await

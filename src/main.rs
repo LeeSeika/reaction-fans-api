@@ -48,6 +48,7 @@ async fn main() -> std::io::Result<()> {
                     Arc::clone(&client),
                 ),
                 video_service: service::video::new(Arc::clone(&db), Arc::clone(&client)),
+                author_service: service::author::new(Arc::clone(&db)),
             }))
             .service(
                 web::scope("/api/v1/users")
@@ -62,6 +63,11 @@ async fn main() -> std::io::Result<()> {
                     .route("/{id}", web::get().to(api::v1::video::get_video))
                     .route("", web::post().to(api::v1::video::add_video)),
             )
+            .service(
+                web::scope("/api/v1/authors")
+                    .route("", web::post().to(api::v1::author::add_author))
+                    .route("/{id}", web::get().to(api::v1::author::get_author)),
+            )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))
     })
@@ -73,4 +79,5 @@ async fn main() -> std::io::Result<()> {
 pub struct AppState {
     pub user_service: service::user::UserService,
     pub video_service: service::video::VideoService,
+    pub author_service: service::author::AuthorService,
 }

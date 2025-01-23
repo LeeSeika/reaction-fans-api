@@ -3,9 +3,9 @@ use sea_orm::ColumnTrait;
 use sea_orm::{EntityTrait, QueryFilter};
 
 use super::svc::UserService;
-use super::UserColumn;
-use super::UserEntity;
 use crate::constant::REGISTER_CODE_EXPIRE_TIME;
+use crate::entity::user::Column as UserColumn;
+use crate::entity::user::Entity as UserEntity;
 use crate::errs::http::Error as HttpError;
 use crate::service::email;
 use tklog::error;

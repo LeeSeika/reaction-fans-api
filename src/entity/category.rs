@@ -27,15 +27,15 @@ impl RelationTrait for Relation {
 
 #[async_trait]
 impl ActiveModelBehavior for ActiveModel {
-    async fn before_save<C>(self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
-    where
-        C: sea_orm::ConnectionTrait,
-    {
-        let now = Utc::now().naive_utc();
-        let mut clone_self = self.clone();
-        if insert {
-            clone_self.created_at = Set(now);
-        }
-        Ok(clone_self)
-    }
+    // async fn before_save<C>(self, db: &C, insert: bool) -> Result<Self, sea_orm::DbErr>
+    // where
+    //     C: sea_orm::ConnectionTrait,
+    // {
+    //     let now = Utc::now().naive_utc();
+    //     let mut clone_self = self.clone();
+    //     if insert {
+    //         clone_self.created_at = Set(now);
+    //     }
+    //     Ok(clone_self)
+    // }
 }

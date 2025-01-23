@@ -1,9 +1,9 @@
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
-use crate::service::video::svc::VideoService;
+use crate::entity::video::Column as VideoColumn;
+use crate::entity::video::Entity as VideoEntity;
+use crate::entity::video::Model as VideoModel;
 use crate::errs::http::Error as HttpError;
-use super::VideoEntity;
-use super::VideoModel;
-use super::VideoColumn;
+use crate::service::video::svc::VideoService;
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 impl VideoService {
     pub async fn get_video(&self, id: String) -> Result<VideoModel, HttpError> {
         let video = VideoEntity::find()

@@ -39,11 +39,11 @@ impl ActiveModelBehavior for ActiveModel {
     where
         C: sea_orm::ConnectionTrait,
     {
+        if insert {
+            return Ok(self);
+        }
         let now = Utc::now().naive_utc();
         let mut clone_self = self.clone();
-        if insert {
-            clone_self.created_at = Set(now);
-        }
         clone_self.updated_at = Set(Some(now));
         Ok(clone_self)
     }

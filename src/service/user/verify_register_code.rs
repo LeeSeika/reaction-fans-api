@@ -1,6 +1,6 @@
-use super::UserActiveModel;
 use super::UserService;
 use crate::entity::user;
+use crate::entity::user::ActiveModel as UserActiveModel;
 use crate::errs::http::Error as HttpError;
 use redis::AsyncCommands;
 use sea_orm::ActiveModelTrait;
