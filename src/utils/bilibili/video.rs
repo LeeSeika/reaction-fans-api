@@ -1,13 +1,7 @@
 use crate::api::v1::video::ResourceType;
+use reqwest::header::USER_AGENT;
 use serde::{Deserialize, Serialize};
-
-pub async fn get_iframe_url(aid: i64, cid: i64) -> String {
-    let url = format!(
-        "https://player.bilibili.com/player.html?cid={}&aid={}&page=1&as_wide=1&high_quality=1&danmaku=0",
-        cid, aid
-    );
-    url
-}
+use std::time::{SystemTime, UNIX_EPOCH};
 
 pub async fn get_meta(
     resource_id: String,

@@ -6,7 +6,8 @@ use crate::api::v1::video::{AddVideoReq, ResourceType};
 use crate::entity::bilibili_meta::ActiveModel as BilibiliMetaActiveModel;
 use crate::entity::video::ActiveModel as VideoActiveModel;
 use crate::errs::http::Error as HttpError;
-use crate::utils::bilibili::{get_iframe_url, get_meta};
+use crate::utils::bilibili::iframe::get_iframe_url;
+use crate::utils::bilibili::video::get_meta;
 
 impl VideoService {
     pub async fn add_video(&self, req: AddVideoReq) -> Result<(), HttpError> {

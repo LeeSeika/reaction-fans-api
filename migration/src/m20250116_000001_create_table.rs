@@ -12,7 +12,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Users::Table)
-                    // .if_not_exists()
+                    .if_not_exists()
                     .col(pk_uuid(Users::Id))
                     .col(string_null(Users::Email).unique_key())
                     .col(string_null(Users::OauthId).unique_key())
@@ -32,6 +32,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Authors::Table)
+                    .if_not_exists()
                     .col(pk_uuid(Authors::Id))
                     .col(string(Authors::Name))
                     .col(string_uniq(Authors::OriginalId))
@@ -49,6 +50,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Categories::Table)
+                    .if_not_exists()
                     .col(pk_uuid(Categories::Id))
                     .col(string(Categories::Name).unique_key())
                     .col(
@@ -63,6 +65,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Topics::Table)
+                    .if_not_exists()
                     .col(pk_uuid(Topics::Id))
                     .col(string(Topics::Name).unique_key())
                     .col(
@@ -77,6 +80,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Videos::Table)
+                    .if_not_exists()
                     .col(pk_uuid(Videos::Id))
                     .col(uuid(Videos::AuthorId))
                     .col(string_null(Videos::OriginalUrl))
@@ -97,6 +101,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(BilibiliMeta::Table)
+                    .if_not_exists()
                     .col(pk_uuid(BilibiliMeta::Id))
                     .col(string_uniq(BilibiliMeta::Bvid))
                     .col(integer_uniq(BilibiliMeta::Aid))

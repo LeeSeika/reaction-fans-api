@@ -5,6 +5,11 @@ pub struct GetVideoReq {
     pub(crate) id: String,
 }
 
+pub struct ListVideosReq {
+    pub(crate) page: Option<u16>,
+    pub(crate) limit: Option<u16>,
+}
+
 #[derive(Deserialize)]
 pub enum ResourceType {
     Bvid,
