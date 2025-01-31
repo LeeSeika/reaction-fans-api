@@ -38,6 +38,7 @@ async fn main() -> std::io::Result<()> {
     // init cache client
     let client = redis::Client::open(conf.cache.url.as_str()).expect("Cache client init failed");
     let client = Arc::new(client);
+    let topic_service = service::topic::new(Arc::clone(&db)).await;
 
     HttpServer::new(move || {
         App::new()
@@ -49,6 +50,7 @@ async fn main() -> std::io::Result<()> {
                 ),
                 video_service: service::video::new(Arc::clone(&db), Arc::clone(&client)),
                 author_service: service::author::new(Arc::clone(&db)),
+                topic_service: topic_service.clone(),
             }))
             .service(
                 web::scope("/api/v1/users")
@@ -80,4 +82,5 @@ pub struct AppState {
     pub user_service: service::user::UserService,
     pub video_service: service::video::VideoService,
     pub author_service: service::author::AuthorService,
+    pub topic_service: service::topic::TopicService,
 }

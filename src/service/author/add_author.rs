@@ -13,6 +13,7 @@ use crate::errs;
 use crate::errs::bilibili::Error;
 use crate::errs::http::Error as HttpError;
 use crate::utils::bilibili::author;
+use sea_orm::QueryFilter;
 
 impl AuthorService {
     pub async fn add_author(&self, req: AddAuthorReq) -> Result<(), HttpError> {
