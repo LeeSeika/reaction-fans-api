@@ -1,6 +1,5 @@
 use thiserror::Error;
 use reqwest::Error as ReqwestError;
-use std::fmt;
 
 #[derive(Error, Debug)]
 pub enum Error {

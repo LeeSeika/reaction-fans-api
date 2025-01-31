@@ -1,4 +1,4 @@
-use super::{cache::Cache, db::Database, mailer::Mailer, nats::Nats, oauth::QQ, server::Server};
+use super::{cache::Cache, db::Database, mailer::Mailer, server::Server};
 use config::{Config as Conf, ConfigError};
 use serde::Deserialize;
 

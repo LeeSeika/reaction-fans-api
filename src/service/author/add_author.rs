@@ -9,7 +9,6 @@ use crate::constant::Platform;
 use crate::entity::author::ActiveModel as AuthorActiveModel;
 use crate::entity::author::Column as AuthorColumn;
 use crate::entity::author::Entity as AuthorEntity;
-use crate::errs;
 use crate::errs::bilibili::Error;
 use crate::errs::http::Error as HttpError;
 use crate::utils::bilibili::author;

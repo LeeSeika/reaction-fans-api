@@ -1,7 +1,5 @@
 use crate::api::v1::video::ResourceType;
-use reqwest::header::USER_AGENT;
 use serde::{Deserialize, Serialize};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 pub async fn get_meta(
     resource_id: String,

@@ -1,5 +1,3 @@
-use std::ops::Deref;
-use std::sync::{Arc, RwLockReadGuard};
 use nucleo_matcher::{Config, Matcher};
 use nucleo_matcher::pattern::{CaseMatching, Normalization, Pattern};
 use crate::service::topic::svc::TopicService;
@@ -16,7 +14,7 @@ impl TopicService {
         let matches: Vec<(&String, u32)> = Pattern::parse(topic.as_str(), CaseMatching::Ignore, Normalization::Smart).match_list::<&String>(&(*list), &mut matcher);
 
         let mut result = vec![];
-        let end_index = matches.len().max(size as usize);
+        let end_index = matches.len().min(size as usize);
         for i in 0..end_index {
             let topic = matches[i].0.to_string();
             result.push(topic);

@@ -70,6 +70,11 @@ async fn main() -> std::io::Result<()> {
                     .route("", web::post().to(api::v1::author::add_author))
                     .route("/{id}", web::get().to(api::v1::author::get_author)),
             )
+            .service(
+                web::scope("/api/v1/topics")
+                    .route("", web::post().to(api::v1::topic::add_topic))
+                    .route("/match", web::get().to(api::v1::topic::match_topic)),
+            )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))
     })

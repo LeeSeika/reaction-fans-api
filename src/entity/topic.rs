@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use sea_orm::{
     prelude::{async_trait, DateTime},
     ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, EntityTrait, EnumIter,
-    PrimaryKeyTrait, RelationDef, RelationTrait, Set,
+    PrimaryKeyTrait, RelationDef, RelationTrait,
 };
 use serde::{Deserialize, Serialize};
 

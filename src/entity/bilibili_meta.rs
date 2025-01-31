@@ -1,11 +1,7 @@
-use chrono::Utc;
 use sea_orm::{
-    prelude::{
-        async_trait::{self, async_trait},
-        DateTime,
-    },
+    prelude::{async_trait::async_trait, DateTime},
     ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
-    EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait, Set,
+    EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
