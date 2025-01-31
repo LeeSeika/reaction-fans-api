@@ -14,3 +14,19 @@ sea-orm = { version = "0.12.0", features = ["runtime-tokio-native-tls", "sqlx-po
 chrono = "0.4.39"
 derive_more = "0.99"
 config = "0.15.4"
+rand = "0.8.5"
+redis = { version = "0.28.1", features = ["tokio-comp", "r2d2"] }
+lettre = "*"
+tklog = "0.2.9"
+uuid = { version = "1.9.1", features = ["v4"] }
+reqwest = { version = "0.12", features = ["json"] }
+strum = { version = "0.21.0", features = ["derive"] }
+md5 = "0.7.0"
+thiserror = "2.0.10"
+nucleo-matcher = "0.3.1"
+
+[workspace]
+members = [
+    ".",
+    "migration"
+]

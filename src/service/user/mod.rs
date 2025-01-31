@@ -1,3 +1,6 @@
-pub mod svc;
 mod login_oauth_qq;
-mod login_oauth_bilibili;
+mod register;
+mod svc;
+mod verify_register_code;
+
+pub use svc::*;
