@@ -30,8 +30,8 @@ impl VideoService {
             tklog::error!("cannot parse pages, error: ", e);
             HttpError::internal_error(None, Some("cannot parse pages"))
         })?;
-        let published_at = chrono::NaiveDateTime::from_timestamp_opt(meta.data.pubdate, 0)
-            .unwrap_or_else(|| chrono::NaiveDateTime::from_timestamp(0, 0));
+        let published_at = chrono::DateTime::from_timestamp(meta.data.pubdate, 0)
+            .unwrap_or_else(|| chrono::DateTime::from_timestamp(0, 0).unwrap());
         let bilibili_meta = BilibiliMetaActiveModel {
             id: Set(meta_id),
             bvid: Set(req.resource_id.clone()),
@@ -40,7 +40,7 @@ impl VideoService {
             pages: Set(pages),
             pic: Set(meta.data.pic),
             title: Set(meta.data.title),
-            pubdate: Set(published_at),
+            pubdate: Set(published_at.naive_utc()),
             duration: Set(meta.data.duration as u64),
             view: Set(meta.data.stat.view as u64),
             danmaku: Set(meta.data.stat.danmaku as u64),
@@ -68,7 +68,7 @@ impl VideoService {
             author_id: Set(author_id),
             topic_id: Set(topic_id),
             category_id: Set(category_id),
-            published_at: Set(published_at),
+            published_at: Set(published_at.naive_utc()),
             ..Default::default()
         };
 

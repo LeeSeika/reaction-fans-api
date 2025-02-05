@@ -1,5 +1,5 @@
 use reqwest::header::USER_AGENT;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 const MIXIN_KEY_ENC_TAB: [usize; 64] = [

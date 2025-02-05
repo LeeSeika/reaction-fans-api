@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::entity::user::Model as UserModel;
 use crate::errs::http::Error as HttpError;
 

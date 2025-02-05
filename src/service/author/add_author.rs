@@ -27,7 +27,7 @@ impl AuthorService {
             })?
             .ok_or(HttpError::bad_request(None, Some("author already exists")))?;
         // check if author is valid
-        let mut name = String::from("");
+        let name: String;
         match req.platform {
             Platform::Bilibili => {
                 let resp = author::get_info(req.original_id.clone())

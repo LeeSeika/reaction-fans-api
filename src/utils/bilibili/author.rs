@@ -1,6 +1,8 @@
+#![allow(non_snake_case)]
+
+use crate::errs;
 use crate::utils::bilibili::sign;
 use serde::Deserialize;
-use crate::errs;
 
 pub async fn get_info(mid: String) -> Result<BilibiliResponse, errs::bilibili::Error> {
     let url_encoded_params = sign::wbi(vec![("mid", mid.clone())]).await;

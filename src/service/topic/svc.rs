@@ -9,7 +9,7 @@ pub struct TopicService {
 }
 
 pub async fn new(db: Arc<DatabaseConnection>) -> TopicService {
-    let mut list = TopicEntity::find()
+    let list = TopicEntity::find()
         .all(db.as_ref())
         .await
         .unwrap()

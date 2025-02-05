@@ -48,7 +48,7 @@ async fn main() -> std::io::Result<()> {
                     Arc::clone(&db),
                     Arc::clone(&client),
                 ),
-                video_service: service::video::new(Arc::clone(&db), Arc::clone(&client)),
+                video_service: service::video::new(Arc::clone(&db)),
                 author_service: service::author::new(Arc::clone(&db)),
                 topic_service: topic_service.clone(),
             }))
