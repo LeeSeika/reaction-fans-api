@@ -37,6 +37,7 @@ async fn main() -> std::io::Result<()> {
 
     // init cache client
     let client = redis::Client::open(conf.cache.url.as_str()).expect("Cache client init failed");
+    let _ = client.get_connection().expect("Cache connection failed");
     let client = Arc::new(client);
     let topic_service = service::topic::new(Arc::clone(&db)).await;
 
@@ -55,10 +56,7 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api/v1/users")
                     .route("/register", web::post().to(api::v1::user::register))
-                    .route(
-                        "/verify",
-                        web::post().to(api::v1::user::verify_register_code),
-                    ),
+                    .route("/verify/{type}", web::post().to(api::v1::user::verify_code)),
             )
             .service(
                 web::scope("/api/v1/videos")
