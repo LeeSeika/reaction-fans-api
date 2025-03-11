@@ -23,7 +23,7 @@ impl MigrationTrait for Migration {
                         timestamp(Users::CreatedAt)
                             .default(SimpleExpr::Custom("CURRENT_TIMESTAMP".to_string())),
                     )
-                    .col(timestamp(Users::UpdatedAt))
+                    .col(timestamp_null(Users::UpdatedAt))
                     .to_owned(),
             )
             .await?;
@@ -88,6 +88,7 @@ impl MigrationTrait for Migration {
                     .col(uuid(Videos::CategoryId))
                     .col(timestamp(Videos::PublishedAt))
                     .col(string(Videos::Platform))
+                    .col(string(Videos::Title))
                     .col(uuid(Videos::MetaId))
                     .col(
                         timestamp(Videos::CreatedAt)
@@ -109,7 +110,6 @@ impl MigrationTrait for Migration {
                     .col(integer(BilibiliMeta::Videos))
                     .col(json(BilibiliMeta::Pages))
                     .col(string(BilibiliMeta::Pic))
-                    .col(string(BilibiliMeta::Title))
                     .col(timestamp(BilibiliMeta::Pubdate))
                     .col(integer(BilibiliMeta::Duration))
                     .col(integer(BilibiliMeta::View))
@@ -188,6 +188,7 @@ enum Videos {
     CategoryId,
     PublishedAt,
     Platform,
+    Title,
     MetaId,
     CreatedAt,
 }
@@ -202,7 +203,6 @@ enum BilibiliMeta {
     Videos,
     Pages,
     Pic,
-    Title,
     Pubdate,
     Duration,
     View,

@@ -16,7 +16,6 @@ pub struct Model {
     pub videos: u64,
     pub pages: Value,
     pub pic: String,
-    pub title: String,
     pub pubdate: DateTime,
     pub duration: u64,
     pub view: u64,

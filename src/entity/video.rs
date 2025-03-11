@@ -20,6 +20,7 @@ pub struct Model {
     pub platform: String,
     pub meta_id: uuid::Uuid,
     pub created_at: DateTime,
+    pub title: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
