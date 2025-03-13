@@ -24,6 +24,9 @@ strum = { version = "0.21.0", features = ["derive"] }
 md5 = "0.7.0"
 thiserror = "2.0.10"
 nucleo-matcher = "0.3.1"
+jwt = "0.16.0"
+hmac = "0.12.1"
+sha2 = "0.10.8"
 
 [workspace]
 members = [

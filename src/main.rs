@@ -3,6 +3,7 @@ pub mod conf;
 pub mod constant;
 pub mod entity;
 pub mod errs;
+pub mod middleware;
 pub mod service;
 pub mod utils;
 
@@ -44,6 +45,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
+                conf: Arc::clone(&conf),
                 user_service: service::user::new(
                     Arc::clone(&conf),
                     Arc::clone(&db),
@@ -56,7 +58,7 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api/v1/users")
                     .route("/register", web::post().to(api::v1::user::register))
-                    .route("/verify/{type}", web::post().to(api::v1::user::verify_code)),
+                    .route("/verify/{biz}", web::post().to(api::v1::user::verify_code)),
             )
             .service(
                 web::scope("/api/v1/videos")
@@ -82,6 +84,7 @@ async fn main() -> std::io::Result<()> {
 }
 
 pub struct AppState {
+    pub conf: Arc<conf::Config>,
     pub user_service: service::user::UserService,
     pub video_service: service::video::VideoService,
     pub author_service: service::author::AuthorService,

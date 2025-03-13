@@ -1,6 +1,10 @@
 [server]
 host = "127.0.0.1"
 port = 8085
+secret = "i-am-secret"
+expiration = 86400
+issuer = "reaction-fans"
+salt = "i-am-salt"
 
 [database]
 url = "postgresql://postgres.ynavyropkerchaxytqkc:a626232582@aws-0-ap-southeast-1.pooler.supabase.com:5432/reaction-fans"
