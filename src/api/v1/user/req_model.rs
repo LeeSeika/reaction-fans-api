@@ -2,6 +2,9 @@
 
 use serde::Deserialize;
 
+pub(crate) const REGISTER: &str = "register";
+pub(crate) const LOGIN: &str = "login";
+
 pub struct LoginOauthQQReq {
     pub(crate) oauth_code: String,
 }

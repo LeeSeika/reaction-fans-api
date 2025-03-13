@@ -8,6 +8,7 @@ use crate::entity::user::Column as UserColumn;
 use crate::entity::user::Entity as UserEntity;
 use crate::errs::http::Error as HttpError;
 use crate::service::email;
+use crate::utils::cache::key::{get_key_with_prefix, REGISTER_CODE_PREFIX};
 use tklog::error;
 
 impl UserService {
@@ -35,7 +36,7 @@ impl UserService {
                 HttpError::internal_error(None, None)
             })?
             .set_ex::<String, String, ()>(
-                email.to_owned(),
+                get_key_with_prefix(REGISTER_CODE_PREFIX, email.as_str()),
                 code.to_owned(),
                 REGISTER_CODE_EXPIRE_TIME,
             )

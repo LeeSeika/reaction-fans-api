@@ -1,7 +1,8 @@
 use super::UserService;
-use crate::entity::user;
 use crate::entity::user::ActiveModel as UserActiveModel;
 use crate::errs::http::Error as HttpError;
+use crate::utils::cache::key::REGISTER_CODE_PREFIX;
+use crate::{entity::user, utils::cache::key::get_key_with_prefix};
 use redis::AsyncCommands;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;
@@ -16,7 +17,10 @@ impl UserService {
             HttpError::internal_error(None, None)
         })?;
         let cache_code = cache
-            .get::<String, Option<String>>(email.to_owned())
+            .get::<String, Option<String>>(get_key_with_prefix(
+                REGISTER_CODE_PREFIX,
+                email.as_str(),
+            ))
             .await
             .map_err(|e| {
                 error!("cannot get register code from cache, error: ", e);
@@ -28,7 +32,7 @@ impl UserService {
 
         // delete code from cache
         let _ = cache
-            .del::<String, ()>(email.to_owned())
+            .del::<String, ()>(get_key_with_prefix(REGISTER_CODE_PREFIX, email.as_str()))
             .await
             .map_err(|e| {
                 warn!("cannot delete register code from cache, error: ", e);
