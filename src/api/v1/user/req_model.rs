@@ -10,6 +10,11 @@ pub struct LoginOauthQQReq {
 }
 
 #[derive(Deserialize)]
+pub struct LoginByCodeReq {
+    pub(crate) email: String,
+}
+
+#[derive(Deserialize)]
 pub struct VerifyRegisterCodeReq {
     pub(crate) email: String,
     pub(crate) code: String,

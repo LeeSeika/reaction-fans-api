@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
 
+use std::fmt::Debug;
+
 use crate::errs;
 use crate::utils::bilibili::sign;
 use serde::Deserialize;
@@ -17,15 +19,33 @@ pub async fn get_info(mid: String) -> Result<BilibiliResponse, errs::bilibili::E
         .header("Referer", "https://www.bilibili.com/")
         .header("Cookie", "buvid4=A5969146-EA42-4811-BA1F-9AE00F651C4426444-022100915-0mOPZbinCsMIHWdkhrNF6Q%3D%3D; buvid_fp_plain=undefined; share_source_origin=WEIXIN; theme_style=light; FEED_LIVE_VERSION=V8; header_theme_version=CLOSE; rpdid=|(u~km)k)m~m0J'u~|RRJY|YY; enable_web_push=DISABLE; home_feed_column=5; bsource=search_google; LIVE_BUVID=AUTO5017077511515282; CURRENT_QUALITY=120; _ga=GA1.1.659939330.1668498701; _ga_34B604LFFQ=GS1.1.1714999668.50.1.1715000067.60.0.0; buvid3=2572106E-7763-EC81-0E65-ECFD3BE6411265437infoc; b_nut=1737211865; _uuid=B65293FA-910EC-411D-5995-A95D7F757107E65634infoc; enable_feed_channel=DISABLE; browser_resolution=1470-798; SESSDATA=3e43a6bb%2C1753623741%2C2c08e%2A12CjC7W3bZ3VMrMQw4P-tO65TqTHS4gK052YKo5cuOQs6gRTs1DibjIkXu-BCwJBDJZJcSVklNOUJtMHVBOFRGQmRJSVZsSGZTalhmZExsa3c4SksxUERPOERnUDE2dktYWTM4ZXdiWGZPcFlndWVWY0dqTlMxV1NLVmc5a1BXNGV3cXJyT0VlekNRIIEC; bili_jct=43b013f51f5f6812d9db78af6ea74f90; DedeUserID=96143142; DedeUserID__ckMd5=ffaae1a2b78d4e99; CURRENT_FNVAL=2000; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzgzMzA5NzMsImlhdCI6MTczODA3MTcxMywicGx0IjotMX0.A3XViSNTwSPvD-ObIGkGj2fzt-TJOVVpkSMSdA6CyAw; bili_ticket_expires=1738330913; sid=puz3wgo5; bp_t_offset_96143142=1027524677360156672; fingerprint=afcf9e8c3e43f637f15629b83ff8d995; PVID=3; buvid_fp=2572106E-7763-EC81-0E65-ECFD3BE6411265437infoc; b_lsid=8DA110D49_194B0894640")
         .send()
-        .await?
-        .json::<BilibiliResponse>()
         .await?;
 
-    if resp.code != 0 {
-        return Err(errs::bilibili::from_code(resp.code, resp.message));
+    let (code, message, ttl, data): (i32, String, i32, serde_json::Value) = resp.json().await?;
+
+    if code != 0 {
+        return Err(errs::bilibili::from_code(code, message));
     }
 
+    // construct BilbiliResponse
+    let resp = construct_bilibii_response(code, message, ttl, data);
+
     Ok(resp)
+}
+
+fn construct_bilibii_response(
+    code: i32,
+    message: String,
+    ttl: i32,
+    data: serde_json::Value,
+) -> BilibiliResponse {
+    let data = serde_json::from_value(data).unwrap();
+    BilibiliResponse {
+        code,
+        message,
+        ttl,
+        data,
+    }
 }
 
 #[derive(Deserialize, Debug)]

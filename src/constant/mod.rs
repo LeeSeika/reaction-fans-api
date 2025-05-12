@@ -1,8 +1,6 @@
-mod constant;
+mod r#const;
 
-pub use constant::*;
-
-pub const REGISTER_CODE_EXPIRE_TIME: u64 = 60 * 5;
+pub use r#const::*;
 
 // order
 // pub enum OrderBy {

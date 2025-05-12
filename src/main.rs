@@ -9,7 +9,8 @@ pub mod utils;
 
 use std::sync::Arc;
 
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, middleware::from_fn, web, App, HttpResponse, HttpServer, Responder};
+use middleware::authorization;
 use sea_orm::Database;
 
 #[get("/")]
@@ -58,22 +59,29 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api/v1/users")
                     .route("/register", web::post().to(api::v1::user::register))
+                    .route(
+                        "/login-by-code",
+                        web::post().to(api::v1::user::login_by_code),
+                    )
                     .route("/verify/{biz}", web::post().to(api::v1::user::verify_code)),
             )
             .service(
                 web::scope("/api/v1/videos")
                     .route("/{id}", web::get().to(api::v1::video::get_video))
+                    .wrap(from_fn(authorization))
                     .route("", web::post().to(api::v1::video::add_video)),
             )
             .service(
                 web::scope("/api/v1/authors")
-                    .route("", web::post().to(api::v1::author::add_author))
-                    .route("/{id}", web::get().to(api::v1::author::get_author)),
+                    .route("/{id}", web::get().to(api::v1::author::get_author))
+                    .wrap(from_fn(authorization))
+                    .route("", web::post().to(api::v1::author::add_author)),
             )
             .service(
                 web::scope("/api/v1/topics")
-                    .route("", web::post().to(api::v1::topic::add_topic))
-                    .route("/match", web::get().to(api::v1::topic::match_topic)),
+                    .route("/match", web::get().to(api::v1::topic::match_topic))
+                    .wrap(from_fn(authorization))
+                    .route("", web::post().to(api::v1::topic::add_topic)),
             )
             .service(hello)
             .route("/hey", web::get().to(manual_hello))

@@ -2,7 +2,7 @@ use actix_web::{
     body::MessageBody,
     dev::{ServiceRequest, ServiceResponse},
     middleware::Next,
-    Error,
+    web, Error,
 };
 
 use crate::{
@@ -32,7 +32,7 @@ pub async fn authorization(
         .last()
         .ok_or_else(|| Error::from(HttpError::unauthorized(None, Some("invalid token"))))?;
 
-    let conf = req.app_data::<AppState>().unwrap().conf.clone();
+    let conf = req.app_data::<web::Data<AppState>>().unwrap().conf.clone();
 
     let _ = utils::jwt::verify(conf, token.to_string()).map_err(|e| match e {
         errs::jwt::Error::Invalid => {
