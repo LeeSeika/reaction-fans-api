@@ -28,12 +28,12 @@ pub async fn get_info(mid: String) -> Result<BilibiliResponse, errs::bilibili::E
     }
 
     // construct BilbiliResponse
-    let resp = construct_bilibii_response(code, message, ttl, data);
+    let resp = construct_bilibili_response(code, message, ttl, data);
 
     Ok(resp)
 }
 
-fn construct_bilibii_response(
+fn construct_bilibili_response(
     code: i32,
     message: String,
     ttl: i32,
