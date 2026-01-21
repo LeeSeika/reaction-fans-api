@@ -1,0 +1,25 @@
+name: reaction-fans-api
+
+on:
+  push:
+    tags:
+      - deploy-prod-v20[2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+      - deploy-dev-v20[2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+      - deploy-stag-v20[2-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+
+env:
+  REGISTRY: "192.168.2.4:5000"
+  IMAGE_NAME: "reaction-fans-api"
+
+jobs:
+  build:
+
+    runs-on: debian:bookworm-slim
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
+
