@@ -1,5 +1,4 @@
 mod login_by_code;
-mod login_oauth_qq;
 mod register;
 mod req_model;
 mod verify_code;
